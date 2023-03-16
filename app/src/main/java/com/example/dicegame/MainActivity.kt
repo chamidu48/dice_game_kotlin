@@ -1,5 +1,6 @@
 package com.example.dicegame
 
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,14 +14,18 @@ class MainActivity : AppCompatActivity() {
         val btnnewgame=findViewById<Button>(R.id.btnnewgame)
         val btnabout=findViewById<Button>(R.id.btnabout)
 
+
         btnnewgame.setOnClickListener{
             val newgameintent=Intent(this,Game::class.java)
             startActivity(newgameintent)
         }
 
         btnabout.setOnClickListener{
-            val aboutintent=Intent(this,About::class.java)
-            startActivity(aboutintent)
+            var dialog= Dialog(this)
+            var dialogBinding=layoutInflater.inflate(R.layout.popup_about,null)
+            dialog.setContentView(dialogBinding)
+            dialog.setCancelable(true)
+            dialog.show()
         }
 
     }
