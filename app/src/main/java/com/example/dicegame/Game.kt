@@ -1,7 +1,9 @@
 package com.example.dicegame
 
+import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -50,10 +52,9 @@ class Game : AppCompatActivity() {
     val computernums= arrayOf<Int>(cran1,cran2,cran3,cran4,cran5)
 
     //--scores--
-    var user:Int=0
-    var computer:Int=0
     var usersum:Int=0
     var comsum:Int=0
+    var target:Int=50
 
     var btnshuffle:Button?=null
     var btnscore:Button?=null
@@ -63,9 +64,20 @@ class Game : AppCompatActivity() {
     var throws:Int=0
     var attempt:Int=1
 
+    var dialogLost:Dialog?=null
+    var dialogLostBinding:View?=null
+    var dialogWin:Dialog?=null
+    var dialogWinBinding:View?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        dialogLost= Dialog(this)
+        dialogLostBinding=layoutInflater.inflate(R.layout.popup_lost,null)
+
+        dialogWin= Dialog(this)
+        dialogWinBinding=layoutInflater.inflate(R.layout.popup_win,null)
 
         u1img=findViewById(R.id.u1)
         u2img=findViewById(R.id.u2)
@@ -135,53 +147,38 @@ class Game : AppCompatActivity() {
             }else if(throws==2){
                 generateRandomCustom()
                 setImages()
-                user=genSum(true)
-                computer=genSum(false)
-                tvscore?.text=user.toString()+"/"+computer.toString()
-//                initialize()
-
-                attempt+=1
-                tvattempt?.text="Attempt 0"+attempt
-
-                btnshuffle?.text="Throw"
-                throws=0
-
-                hideControllers()
-
-                resetButtons()
+                setScore()
             }
 
             if (throws==1){
                 showControllers()
             }
-
-
-
         }
         btnscore?.setOnClickListener {
-            attempt+=1
-            tvattempt?.text="Attempt 0"+attempt
-            user=genSum(true)
-            computer=genSum(false)
-            tvscore?.text=computer.toString()+"/"+user.toString()
-//            initialize()
-
-            hideControllers()
-
-            resetButtons()
-
-            btnshuffle?.text="Throw"
-
-            throws=0
+            setScore()
         }
+    }
 
+    private fun setScore(){
+        attempt+=1
+        tvattempt?.text="Round "+attempt
+        usersum=genSum(true)
+        comsum=genSum(false)
+        tvscore?.text=comsum.toString()+"/"+usersum.toString()
+
+        if (usersum>=target || comsum>=target){
+            checkWins()
+        }
+        hideControllers()
+        resetButtons()
+        btnshuffle?.text="Throw"
+        throws=0
     }
 
     private fun generateRandomCustom(){
 
         for (i in 0..computernums.size-1){
             computernums[i]=ran.nextInt(6)+1
-            println(computernums[i])
         }
 
         if (btn1Tapped==false){
@@ -198,6 +195,37 @@ class Game : AppCompatActivity() {
         }
         if (btn5Tapped==false){
             usernums[4]=ran.nextInt(5)+1
+        }
+    }
+
+    private fun generateComputerValuesRandom(){}
+
+    private fun checkWins(){
+        print("check wins ran")
+        if(usersum==target && comsum==target){
+            //--tie state functions--
+            println("tied")
+        }
+        else if (usersum>comsum){
+            //--user wins
+            println("user won")
+            dialogWinBinding?.let { dialogWin?.setContentView(it) }
+            dialogWin?.setCancelable(true)
+            dialogWin?.setCanceledOnTouchOutside(false)
+            dialogWin?.setOnCancelListener{
+                finish()
+            }
+            dialogWin?.show()
+        } else if(comsum>usersum){
+            //--user lost
+            println("use lost")
+            dialogLostBinding?.let { dialogLost?.setContentView(it) }
+            dialogLost?.setCancelable(true)
+            dialogLost?.setCanceledOnTouchOutside(false)
+            dialogLost?.setOnCancelListener{
+                finish()
+            }
+            dialogLost?.show()
         }
     }
 

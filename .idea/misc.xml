@@ -5,9 +5,11 @@
       <map>
         <entry key="..\:/Kotlin/DiceGame/app/src/main/res/drawable/button_background.xml" value="0.18611111111111112" />
         <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/activity_about.xml" value="0.1" />
-        <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/activity_game.xml" value="0.22" />
+        <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/activity_game.xml" value="0.5" />
         <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/activity_main.xml" value="0.15" />
-        <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/popup_about.xml" value="0.2" />
+        <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/popup_about.xml" value="0.18" />
+        <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/popup_win.xml" value="0.1" />
+        <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/popup_winlost.xml" value="0.15" />
       </map>
     </option>
   </component>
