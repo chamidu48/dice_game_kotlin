@@ -72,6 +72,9 @@ class Game : AppCompatActivity() {
     //--for computer random rolls--
     var check:Boolean=true
 
+    //--for tie state--
+    var isTie:Boolean=false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -254,30 +257,33 @@ class Game : AppCompatActivity() {
 
     private fun checkWins(){
         print("check wins ran")
-        if(usersum==target && comsum==target){
-            //--tie state functions--
-            println("tied")
-        }
-        else if (usersum>comsum){
-            //--user wins
-            println("user won")
-            dialogWinBinding?.let { dialogWin?.setContentView(it) }
-            dialogWin?.setCancelable(true)
-            dialogWin?.setCanceledOnTouchOutside(false)
-            dialogWin?.setOnCancelListener{
-                finish()
+        if (usersum>=target || comsum>=target){
+            if(usersum==comsum){
+                //--tie state functions--
+                println("tied")
+                isTie=true
             }
-            dialogWin?.show()
-        } else if(comsum>usersum){
-            //--user lost
-            println("use lost")
-            dialogLostBinding?.let { dialogLost?.setContentView(it) }
-            dialogLost?.setCancelable(true)
-            dialogLost?.setCanceledOnTouchOutside(false)
-            dialogLost?.setOnCancelListener{
-                finish()
+            else if (usersum>comsum){
+                //--user wins
+                println("user won")
+                dialogWinBinding?.let { dialogWin?.setContentView(it) }
+                dialogWin?.setCancelable(true)
+                dialogWin?.setCanceledOnTouchOutside(false)
+                dialogWin?.setOnCancelListener{
+                    finish()
+                }
+                dialogWin?.show()
+            } else if(comsum>usersum){
+                //--user lost
+                println("use lost")
+                dialogLostBinding?.let { dialogLost?.setContentView(it) }
+                dialogLost?.setCancelable(true)
+                dialogLost?.setCanceledOnTouchOutside(false)
+                dialogLost?.setOnCancelListener{
+                    finish()
+                }
+                dialogLost?.show()
             }
-            dialogLost?.show()
         }
     }
 
