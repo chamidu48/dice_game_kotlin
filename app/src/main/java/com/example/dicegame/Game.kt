@@ -141,6 +141,16 @@ class Game : AppCompatActivity() {
         hideControllers()
 
         btnshuffle?.setOnClickListener {
+            if(isTie){
+                //--if the game tied--
+                println("tied")
+                hideControllers()
+                generateUserValues()
+                generateComputerValues()
+                setImages()
+                setScore()
+            }
+            //--if the game not tied
             if(throws<2){
                 generateUserValues()
 
@@ -185,6 +195,7 @@ class Game : AppCompatActivity() {
         tvattempt?.text="Round "+attempt
         usersum=genSum(true)
         comsum=genSum(false)
+
         tvscore?.text=comsum.toString()+"/"+usersum.toString()
 
         if (usersum>=target || comsum>=target){
@@ -197,7 +208,6 @@ class Game : AppCompatActivity() {
     }
 
     private fun generateUserValues(){
-
         if (btn1Tapped==false){
             usernums[0]=ran.nextInt(5)+1
         }
@@ -264,6 +274,7 @@ class Game : AppCompatActivity() {
                 isTie=true
             }
             else if (usersum>comsum){
+                isTie=false
                 //--user wins
                 println("user won")
                 dialogWinBinding?.let { dialogWin?.setContentView(it) }
@@ -274,6 +285,7 @@ class Game : AppCompatActivity() {
                 }
                 dialogWin?.show()
             } else if(comsum>usersum){
+                isTie=false
                 //--user lost
                 println("use lost")
                 dialogLostBinding?.let { dialogLost?.setContentView(it) }
@@ -315,6 +327,8 @@ class Game : AppCompatActivity() {
     }
 
     private fun hideControllers(){
+
+        println("hide")
         btnscore?.isVisible=false
         btnget1?.isVisible=false
         btnget2?.isVisible=false
