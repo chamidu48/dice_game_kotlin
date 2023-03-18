@@ -7,12 +7,13 @@
     android:layout_gravity="center">
 
     <TextView
-        android:id="@+id/tvshowwin"
+        android:id="@+id/tvlost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="50dp"
-        android:text="You won!"
+        android:text="You win!"
         android:textSize="70px"
+        android:textColor="@color/backgroundcolor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

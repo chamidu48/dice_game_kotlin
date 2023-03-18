@@ -54,7 +54,7 @@ class Game : AppCompatActivity() {
     //--scores--
     var usersum:Int=0
     var comsum:Int=0
-    var target:Int=50
+    var target:Int=109
 
     var btnshuffle:Button?=null
     var btnscore:Button?=null
@@ -69,9 +69,15 @@ class Game : AppCompatActivity() {
     var dialogWin:Dialog?=null
     var dialogWinBinding:View?=null
 
+    //--for computer random rolls--
+    var check:Boolean=true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        target=intent.getIntExtra("EXTRA_DATA",109)
+        println(target)
 
         dialogLost= Dialog(this)
         dialogLostBinding=layoutInflater.inflate(R.layout.popup_lost,null)
@@ -133,21 +139,28 @@ class Game : AppCompatActivity() {
 
         btnshuffle?.setOnClickListener {
             if(throws<2){
-                generateRandomCustom()
+                generateUserValues()
+
+                if (throws==0){
+                    println(throws)
+                    generateComputerValues()
+                    btnshuffle?.text="Re-throw"}
+                else if(throws==1){
+                    btnshuffle?.text="Re-throw again"}
+
                 setImages()
-                println(cran1)
-
-                if (throws==0){btnshuffle?.text="Re-throw"}
-                else if(throws==1){btnshuffle?.text="Re-throw again"}
-
                 throws+=1
 
                 resetButtons()
 
             }else if(throws==2){
-                generateRandomCustom()
+                println(throws)
+                generateUserValues()
+                generateComputerValuesRandom()
+                generateComputerValuesRandom()
                 setImages()
                 setScore()
+                throws=0
             }
 
             if (throws==1){
@@ -155,6 +168,11 @@ class Game : AppCompatActivity() {
             }
         }
         btnscore?.setOnClickListener {
+            if(throws==2){
+                generateComputerValuesRandom()
+                generateComputerValuesRandom()
+                setImages()
+            }
             setScore()
         }
     }
@@ -175,11 +193,7 @@ class Game : AppCompatActivity() {
         throws=0
     }
 
-    private fun generateRandomCustom(){
-
-        for (i in 0..computernums.size-1){
-            computernums[i]=ran.nextInt(6)+1
-        }
+    private fun generateUserValues(){
 
         if (btn1Tapped==false){
             usernums[0]=ran.nextInt(5)+1
@@ -198,7 +212,45 @@ class Game : AppCompatActivity() {
         }
     }
 
-    private fun generateComputerValuesRandom(){}
+    private fun generateComputerValues(){
+        for (i in 0..computernums.size-1){
+            computernums[i]=ran.nextInt(6)+1
+        }
+    }
+
+    private fun generateComputerValuesRandom(){
+        check=ran.nextBoolean()
+        println("genrate random numbers for computer: "+check)
+        if(check){
+            println("gen ran true")
+            //--keep dices randomly
+            btn1Tapped=ran.nextBoolean()
+            btn2Tapped=ran.nextBoolean()
+            btn3Tapped=ran.nextBoolean()
+            btn4Tapped=ran.nextBoolean()
+            btn5Tapped=ran.nextBoolean()
+
+            //--reroll
+            if (btn1Tapped==false){
+                computernums[0]=ran.nextInt(5)+1
+            }
+            if (btn2Tapped==false){
+                computernums[1]=ran.nextInt(5)+1
+            }
+            if (btn3Tapped==false){
+                computernums[2]=ran.nextInt(5)+1
+            }
+            if (btn4Tapped==false){
+                computernums[3]=ran.nextInt(5)+1
+            }
+            if (btn5Tapped==false){
+                computernums[4]=ran.nextInt(5)+1
+            }
+        }else{
+            println("gen ran false")
+            //--no rolls
+        }
+    }
 
     private fun checkWins(){
         print("check wins ran")

@@ -8,6 +8,8 @@
         <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/activity_game.xml" value="0.5" />
         <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/activity_main.xml" value="0.15" />
         <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/popup_about.xml" value="0.18" />
+        <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/popup_lost.xml" value="0.1" />
+        <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/popup_set_target.xml" value="0.15" />
         <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/popup_win.xml" value="0.1" />
         <entry key="..\:/Kotlin/DiceGame/app/src/main/res/layout/popup_winlost.xml" value="0.15" />
       </map>
