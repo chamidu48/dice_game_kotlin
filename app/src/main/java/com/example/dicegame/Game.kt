@@ -1,5 +1,4 @@
 package com.example.dicegame
-
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -224,6 +223,7 @@ class Game : AppCompatActivity() {
         }
     }
 
+    //--set the score on the screen and checking win status
     private fun setScore(){
         attempt+=1
         tvattempt?.text="Round "+attempt
@@ -242,6 +242,7 @@ class Game : AppCompatActivity() {
         throws=0
     }
 
+    //--generate user dices randomly
     private fun generateUserValues(){
         if (btn1Tapped==false){
             usernums[0]=ran.nextInt(6)+1
@@ -260,18 +261,21 @@ class Game : AppCompatActivity() {
         }
     }
 
+    //--generate computer numbers radomly
     private fun generateComputerValues(){
         for (i in 0..computernums.size-1){
             computernums[i]=ran.nextInt(6)+1
         }
     }
 
+    //--generate computer walues for two rerolls
     private fun computerValuesGenerator(){
         if (modeswitch?.isChecked == true){
             computerValuesAdvance()
         }else computerValuesEasy()
     }
 
+    //--generate computer values accoprding to the random stratergy
     private fun computerValuesEasy(){
         check=ran.nextBoolean()
         println("genrate random numbers for computer: "+check)
@@ -292,6 +296,7 @@ class Game : AppCompatActivity() {
         }
     }
 
+    //--generate computer values accorfing to an algorithm--
     private fun computerValuesAdvance(){
         if (usersum>=comsum){
             for(t in 0..computernums.size-1){
@@ -311,24 +316,25 @@ class Game : AppCompatActivity() {
         }
         rollComputerValues()
     }
-
+    //--roll the computer values--
     private fun rollComputerValues(){
-        if (keep1com==false){
+        if (keepcomarray[0]==false){
             computernums[0]=ran.nextInt(5)+1
         }
-        if (keep2com==false){
+        if (keepcomarray[1]==false){
             computernums[1]=ran.nextInt(5)+1
         }
-        if (keep3com==false){
+        if (keepcomarray[2]==false){
             computernums[2]=ran.nextInt(5)+1
         }
-        if (keep4com==false){
+        if (keepcomarray[3]==false){
             computernums[3]=ran.nextInt(5)+1
         }
-        if (keep5com==false){
+        if (keepcomarray[4]==false){
             computernums[4]=ran.nextInt(5)+1}
     }
 
+    //--check winning status and show user the popup windows
     private fun checkWins(){
         print("check wins ran")
         if (usersum>=target || comsum>=target){
@@ -366,6 +372,7 @@ class Game : AppCompatActivity() {
         }
     }
 
+    //--setting all the images as the numbers generated
     private fun setImages(){
         u1img?.setImageResource(resources.getIdentifier(usersides[usernums[0]],"drawable","com.example.dicegame"))
         u2img?.setImageResource(resources.getIdentifier(usersides[usernums[1]],"drawable","com.example.dicegame"))
@@ -379,6 +386,7 @@ class Game : AppCompatActivity() {
         c5img?.setImageResource(resources.getIdentifier(computersides[computernums[4]],"drawable","com.example.dicegame"))
     }
 
+    //--resetting all the buttons which have changed
     private fun resetButtons(){
         btnget1?.setBackgroundColor(getResources().getColor(R.color.backgroundcolor))
         btnget2?.setBackgroundColor(getResources().getColor(R.color.backgroundcolor))
@@ -413,6 +421,7 @@ class Game : AppCompatActivity() {
         btnget5?.isVisible=true
     }
 
+    //--initializes all the widgets like buttons, textfields, images--
     private fun initialize(){
         u1img?.setImageResource(resources.getIdentifier(usersides[0],"drawable","com.example.dicegame"))
         u2img?.setImageResource(resources.getIdentifier(usersides[0],"drawable","com.example.dicegame"))
@@ -434,6 +443,7 @@ class Game : AppCompatActivity() {
 
     }
 
+    //--get the sum of values by inserting whether user or computer
     private fun genSum(user:Boolean):Int{
         if (user){
             for(i in 0..usernums.size-1){
@@ -503,3 +513,16 @@ class Game : AppCompatActivity() {
         setImages()
     }
 }
+
+/**
+ *
+ * ALGORITHM
+ * First, the computer will check whether the user's sum is greater than or equal to the computer sum.
+ * If so, computer will keep 6,5,4 dices if he hes rolled before and roll the others.
+ *
+ * If user is not greater than comuter sum, computer checks again whether user is behind the
+ * computer sum value in 10 values, If its true, computer will again keep 5 and 6 values if has previously rolled.
+ *
+ * othervise he won't keep any dices. All the dices will rolled randomly
+ *
+ * **/

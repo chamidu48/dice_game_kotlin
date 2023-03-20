@@ -1,5 +1,6 @@
-package com.example.dicegame
+//----video link--https://drive.google.com/file/d/1aSEqjuOhy1yU5nnWJU4Pbzdseq835rVR/view?usp=share_link--
 
+package com.example.dicegame
 import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
