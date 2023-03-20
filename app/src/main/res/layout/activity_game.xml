@@ -8,13 +8,13 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="305dp"
-        android:layout_height="94dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="321dp"
+        android:layout_height="112dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="356dp"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/u1"
@@ -22,11 +22,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
         <ImageView
             android:id="@+id/u2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/u3"
@@ -34,11 +42,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
         <ImageView
             android:id="@+id/u4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/u5"
@@ -49,12 +65,11 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="308dp"
-        android:layout_height="117dp"
-        android:layout_marginTop="116dp"
+        android:layout_width="313dp"
+        android:layout_height="105dp"
+        android:layout_marginTop="164dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -64,11 +79,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
         <ImageView
             android:id="@+id/c2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/c3"
@@ -76,11 +99,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
         <ImageView
             android:id="@+id/c4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/c5"
@@ -93,30 +124,28 @@
         android:id="@+id/shuffle"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="43dp"
         android:text="Throw"
         android:textSize="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <Button
         android:id="@+id/btnscore"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="25dp"
         android:text="Score"
         android:textSize="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <LinearLayout
         android:layout_width="324dp"
-        android:layout_height="107dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="95dp"
+        android:layout_marginTop="36dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
@@ -200,10 +229,10 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="244dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="Computer"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/score_view"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -212,8 +241,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="0/0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.838"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.956"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -222,20 +251,51 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
-        android:text="Attempt 01"
+        android:text="Round 1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/tvwins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="TextView"
+        android:text="H:0/C:0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvtarget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="19dp"
+        android:text="Target : 101"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnsettarget"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:text="Set"
+        android:textSize="28px"
+        app:layout_constraintEnd_toEndOf="@+id/tvtarget"
+        app:layout_constraintTop_toBottomOf="@+id/tvtarget" />
+
+    <Switch
+        android:id="@+id/mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:text="Easy"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvwins" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

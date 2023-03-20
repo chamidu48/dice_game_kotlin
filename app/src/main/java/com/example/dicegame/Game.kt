@@ -4,9 +4,7 @@ import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.isVisible
 
 class Game : AppCompatActivity() {
@@ -45,21 +43,36 @@ class Game : AppCompatActivity() {
     var btn4Tapped:Boolean=false
     var btn5Tapped:Boolean=false
 
+    var keep1com:Boolean=false
+    var keep2com:Boolean=false
+    var keep3com:Boolean=false
+    var keep4com:Boolean=false
+    var keep5com:Boolean=false
+
     var ran: java.util.Random = java.util.Random()
 
-    val sides= arrayOf<String>("one","one","two","three","four","five","six")
+    val usersides= arrayOf<String>("userone","userone","usertwo","userthree","userfour","userfive","usersix")
+    val computersides= arrayOf<String>("comone","comone","comtwo","comthree","comfour","comfive","comsix")
+    val keepcomarray=arrayOf<Boolean>(keep1com,keep2com,keep3com,keep4com,keep5com)
+
     val usernums= arrayOf<Int>(uran1,uran2,uran3,uran4,uran5)
     val computernums= arrayOf<Int>(cran1,cran2,cran3,cran4,cran5)
 
     //--scores--
     var usersum:Int=0
     var comsum:Int=0
-    var target:Int=109
+    var target:Int=101
+    var comwins:Int=0
+    var userwins:Int=0
 
     var btnshuffle:Button?=null
     var btnscore:Button?=null
     var tvscore:TextView?=null
     var tvattempt:TextView?=null
+    var btnsettarget:Button?=null
+    var tvtarget:TextView?=null
+    var tvwins:TextView?=null
+    var modeswitch:Switch?=null
 
     var throws:Int=0
     var attempt:Int=1
@@ -79,14 +92,8 @@ class Game : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        target=intent.getIntExtra("EXTRA_DATA",109)
-        println(target)
-
-        dialogLost= Dialog(this)
-        dialogLostBinding=layoutInflater.inflate(R.layout.popup_lost,null)
-
-        dialogWin= Dialog(this)
-        dialogWinBinding=layoutInflater.inflate(R.layout.popup_win,null)
+        println(userwins)
+        println(comwins)
 
         u1img=findViewById(R.id.u1)
         u2img=findViewById(R.id.u2)
@@ -105,13 +112,24 @@ class Game : AppCompatActivity() {
         btnget4=findViewById<Button>(R.id.btngett4)
         btnget5=findViewById<Button>(R.id.btnget5)
 
+        modeswitch=findViewById(R.id.mode)
         btnshuffle=findViewById<Button>(R.id.shuffle)
         btnscore=findViewById<Button>(R.id.btnscore)
         tvscore=findViewById<TextView>(R.id.score_view)
         tvattempt=findViewById<TextView>(R.id.tvattempt)
+        btnsettarget=findViewById(R.id.btnsettarget)
+        tvtarget=findViewById(R.id.tvtarget)
+        tvwins=findViewById(R.id.tvwins)
 
         initialize()
+        hideControllers()
+        dialogLost= Dialog(this)
+        dialogLostBinding=layoutInflater.inflate(R.layout.popup_lost,null)
+        dialogWin= Dialog(this)
+        dialogWinBinding=layoutInflater.inflate(R.layout.popup_win,null)
+        var dialog= Dialog(this)
 
+        //--onclick events--
         btnget1?.setOnClickListener {
             btn1Tapped=!btn1Tapped
             if(btn1Tapped){btnget1?.setBackgroundColor(getResources().getColor(R.color.teal_700));}
@@ -137,10 +155,29 @@ class Game : AppCompatActivity() {
             if(btn5Tapped){btnget5?.setBackgroundColor(getResources().getColor(R.color.teal_700));}
             else btnget5?.setBackgroundColor(getResources().getColor(R.color.backgroundcolor))
         }
+        modeswitch?.setOnCheckedChangeListener { compoundButton, isChecked ->
+            if (isChecked){
+                modeswitch?.text="Hard"
+            }else modeswitch?.text="Easy"
+        }
+        btnsettarget?.setOnClickListener {
+            dialog.setContentView(R.layout.popup_set_target)
+            dialog.setCancelable(false)
 
-        hideControllers()
+            var tfsettarget=dialog.findViewById(R.id.tftarget) as EditText
+            var btnnext=dialog.findViewById(R.id.btnplay) as Button
 
+            btnnext.setOnClickListener {
+                target=Integer.parseInt(tfsettarget.text.toString())
+                tvtarget?.text="Target: "+target
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
         btnshuffle?.setOnClickListener {
+            btnsettarget?.isEnabled=false
+            modeswitch?.isEnabled=false
+
             if(isTie){
                 //--if the game tied--
                 println("tied")
@@ -169,8 +206,8 @@ class Game : AppCompatActivity() {
             }else if(throws==2){
                 println(throws)
                 generateUserValues()
-                generateComputerValuesRandom()
-                generateComputerValuesRandom()
+                computerValuesGenerator()
+                computerValuesGenerator()
                 setImages()
                 setScore()
                 throws=0
@@ -182,8 +219,8 @@ class Game : AppCompatActivity() {
         }
         btnscore?.setOnClickListener {
             if(throws==2){
-                generateComputerValuesRandom()
-                generateComputerValuesRandom()
+                computerValuesGenerator()
+                computerValuesGenerator()
                 setImages()
             }
             setScore()
@@ -199,6 +236,7 @@ class Game : AppCompatActivity() {
         tvscore?.text=comsum.toString()+"/"+usersum.toString()
 
         if (usersum>=target || comsum>=target){
+            print("ckeck win")
             checkWins()
         }
         hideControllers()
@@ -209,19 +247,19 @@ class Game : AppCompatActivity() {
 
     private fun generateUserValues(){
         if (btn1Tapped==false){
-            usernums[0]=ran.nextInt(5)+1
+            usernums[0]=ran.nextInt(6)+1
         }
         if (btn2Tapped==false){
-            usernums[1]=ran.nextInt(5)+1
+            usernums[1]=ran.nextInt(6)+1
         }
         if (btn3Tapped==false){
-            usernums[2]=ran.nextInt(5)+1
+            usernums[2]=ran.nextInt(6)+1
         }
         if (btn4Tapped==false){
-            usernums[3]=ran.nextInt(5)+1
+            usernums[3]=ran.nextInt(6)+1
         }
         if (btn5Tapped==false){
-            usernums[4]=ran.nextInt(5)+1
+            usernums[4]=ran.nextInt(6)+1
         }
     }
 
@@ -231,43 +269,73 @@ class Game : AppCompatActivity() {
         }
     }
 
-    private fun generateComputerValuesRandom(){
+    private fun computerValuesGenerator(){
+        if (modeswitch?.isChecked == true){
+            computerValuesAdvance()
+        }else computerValuesEasy()
+    }
+
+    private fun computerValuesEasy(){
         check=ran.nextBoolean()
         println("genrate random numbers for computer: "+check)
         if(check){
             println("gen ran true")
             //--keep dices randomly
-            btn1Tapped=ran.nextBoolean()
-            btn2Tapped=ran.nextBoolean()
-            btn3Tapped=ran.nextBoolean()
-            btn4Tapped=ran.nextBoolean()
-            btn5Tapped=ran.nextBoolean()
+            keep1com=ran.nextBoolean()
+            keep2com=ran.nextBoolean()
+            keep3com=ran.nextBoolean()
+            keep4com=ran.nextBoolean()
+            keep5com=ran.nextBoolean()
 
             //--reroll
-            if (btn1Tapped==false){
-                computernums[0]=ran.nextInt(5)+1
-            }
-            if (btn2Tapped==false){
-                computernums[1]=ran.nextInt(5)+1
-            }
-            if (btn3Tapped==false){
-                computernums[2]=ran.nextInt(5)+1
-            }
-            if (btn4Tapped==false){
-                computernums[3]=ran.nextInt(5)+1
-            }
-            if (btn5Tapped==false){
-                computernums[4]=ran.nextInt(5)+1
-            }
+            rollComputerValues()
         }else{
             println("gen ran false")
             //--no rolls
         }
     }
 
+    private fun computerValuesAdvance(){
+        if (usersum>=comsum){
+            for(t in 0..computernums.size-1){
+                if (computernums[t]>=4){
+                    keepcomarray[t]=true
+                }else keepcomarray[t]=false
+            }
+        }
+        else {
+            if ((comsum-usersum)>=10){
+                for(t in 0..computernums.size-1){
+                    if (computernums[t]>=5){
+                        keepcomarray[t]=true
+                    }else keepcomarray[t]=false
+                }
+            }
+        }
+        rollComputerValues()
+    }
+
+    private fun rollComputerValues(){
+        if (keep1com==false){
+            computernums[0]=ran.nextInt(5)+1
+        }
+        if (keep2com==false){
+            computernums[1]=ran.nextInt(5)+1
+        }
+        if (keep3com==false){
+            computernums[2]=ran.nextInt(5)+1
+        }
+        if (keep4com==false){
+            computernums[3]=ran.nextInt(5)+1
+        }
+        if (keep5com==false){
+            computernums[4]=ran.nextInt(5)+1}
+    }
+
     private fun checkWins(){
         print("check wins ran")
         if (usersum>=target || comsum>=target){
+            print("if passed")
             if(usersum==comsum){
                 //--tie state functions--
                 println("tied")
@@ -277,6 +345,7 @@ class Game : AppCompatActivity() {
                 isTie=false
                 //--user wins
                 println("user won")
+                userwins+=1
                 dialogWinBinding?.let { dialogWin?.setContentView(it) }
                 dialogWin?.setCancelable(true)
                 dialogWin?.setCanceledOnTouchOutside(false)
@@ -288,6 +357,7 @@ class Game : AppCompatActivity() {
                 isTie=false
                 //--user lost
                 println("use lost")
+                comwins+=1
                 dialogLostBinding?.let { dialogLost?.setContentView(it) }
                 dialogLost?.setCancelable(true)
                 dialogLost?.setCanceledOnTouchOutside(false)
@@ -300,16 +370,16 @@ class Game : AppCompatActivity() {
     }
 
     private fun setImages(){
-        u1img?.setImageResource(resources.getIdentifier(sides[usernums[0]],"drawable","com.example.dicegame"))
-        u2img?.setImageResource(resources.getIdentifier(sides[usernums[1]],"drawable","com.example.dicegame"))
-        u3img?.setImageResource(resources.getIdentifier(sides[usernums[2]],"drawable","com.example.dicegame"))
-        u4img?.setImageResource(resources.getIdentifier(sides[usernums[3]],"drawable","com.example.dicegame"))
-        u5img?.setImageResource(resources.getIdentifier(sides[usernums[4]],"drawable","com.example.dicegame"))
-        c1img?.setImageResource(resources.getIdentifier(sides[computernums[0]],"drawable","com.example.dicegame"))
-        c2img?.setImageResource(resources.getIdentifier(sides[computernums[1]],"drawable","com.example.dicegame"))
-        c3img?.setImageResource(resources.getIdentifier(sides[computernums[2]],"drawable","com.example.dicegame"))
-        c4img?.setImageResource(resources.getIdentifier(sides[computernums[3]],"drawable","com.example.dicegame"))
-        c5img?.setImageResource(resources.getIdentifier(sides[computernums[4]],"drawable","com.example.dicegame"))
+        u1img?.setImageResource(resources.getIdentifier(usersides[usernums[0]],"drawable","com.example.dicegame"))
+        u2img?.setImageResource(resources.getIdentifier(usersides[usernums[1]],"drawable","com.example.dicegame"))
+        u3img?.setImageResource(resources.getIdentifier(usersides[usernums[2]],"drawable","com.example.dicegame"))
+        u4img?.setImageResource(resources.getIdentifier(usersides[usernums[3]],"drawable","com.example.dicegame"))
+        u5img?.setImageResource(resources.getIdentifier(usersides[usernums[4]],"drawable","com.example.dicegame"))
+        c1img?.setImageResource(resources.getIdentifier(computersides[computernums[0]],"drawable","com.example.dicegame"))
+        c2img?.setImageResource(resources.getIdentifier(computersides[computernums[1]],"drawable","com.example.dicegame"))
+        c3img?.setImageResource(resources.getIdentifier(computersides[computernums[2]],"drawable","com.example.dicegame"))
+        c4img?.setImageResource(resources.getIdentifier(computersides[computernums[3]],"drawable","com.example.dicegame"))
+        c5img?.setImageResource(resources.getIdentifier(computersides[computernums[4]],"drawable","com.example.dicegame"))
     }
 
     private fun resetButtons(){
@@ -347,21 +417,23 @@ class Game : AppCompatActivity() {
     }
 
     private fun initialize(){
-        u1img?.setImageResource(resources.getIdentifier(sides[0],"drawable","com.example.dicegame"))
-        u2img?.setImageResource(resources.getIdentifier(sides[0],"drawable","com.example.dicegame"))
-        u3img?.setImageResource(resources.getIdentifier(sides[0],"drawable","com.example.dicegame"))
-        u4img?.setImageResource(resources.getIdentifier(sides[0],"drawable","com.example.dicegame"))
-        u5img?.setImageResource(resources.getIdentifier(sides[0],"drawable","com.example.dicegame"))
-        c1img?.setImageResource(resources.getIdentifier(sides[0],"drawable","com.example.dicegame"))
-        c2img?.setImageResource(resources.getIdentifier(sides[0],"drawable","com.example.dicegame"))
-        c3img?.setImageResource(resources.getIdentifier(sides[0],"drawable","com.example.dicegame"))
-        c4img?.setImageResource(resources.getIdentifier(sides[0],"drawable","com.example.dicegame"))
-        c5img?.setImageResource(resources.getIdentifier(sides[0],"drawable","com.example.dicegame"))
+        u1img?.setImageResource(resources.getIdentifier(usersides[0],"drawable","com.example.dicegame"))
+        u2img?.setImageResource(resources.getIdentifier(usersides[0],"drawable","com.example.dicegame"))
+        u3img?.setImageResource(resources.getIdentifier(usersides[0],"drawable","com.example.dicegame"))
+        u4img?.setImageResource(resources.getIdentifier(usersides[0],"drawable","com.example.dicegame"))
+        u5img?.setImageResource(resources.getIdentifier(usersides[0],"drawable","com.example.dicegame"))
+        c1img?.setImageResource(resources.getIdentifier(computersides[0],"drawable","com.example.dicegame"))
+        c2img?.setImageResource(resources.getIdentifier(computersides[0],"drawable","com.example.dicegame"))
+        c3img?.setImageResource(resources.getIdentifier(computersides[0],"drawable","com.example.dicegame"))
+        c4img?.setImageResource(resources.getIdentifier(computersides[0],"drawable","com.example.dicegame"))
+        c5img?.setImageResource(resources.getIdentifier(computersides[0],"drawable","com.example.dicegame"))
 
         for(i in 0..usernums.size-1){
             usernums[i]=1
             computernums[i]=1
         }
+
+        tvwins?.text="H:"+userwins+"/C:"+comwins
 
     }
 
@@ -379,5 +451,17 @@ class Game : AppCompatActivity() {
             }
             return comsum
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("computer",comwins)
+        outState.putInt("user",userwins)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        savedInstanceState.getInt("computer")
+        savedInstanceState.getInt("user")
     }
 }
