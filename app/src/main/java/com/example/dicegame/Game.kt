@@ -53,10 +53,10 @@ class Game : AppCompatActivity() {
 
     val usersides= arrayOf<String>("userone","userone","usertwo","userthree","userfour","userfive","usersix")
     val computersides= arrayOf<String>("comone","comone","comtwo","comthree","comfour","comfive","comsix")
-    val keepcomarray=arrayOf<Boolean>(keep1com,keep2com,keep3com,keep4com,keep5com)
+    var keepcomarray=arrayOf<Boolean>(keep1com,keep2com,keep3com,keep4com,keep5com)
 
-    val usernums= arrayOf<Int>(uran1,uran2,uran3,uran4,uran5)
-    val computernums= arrayOf<Int>(cran1,cran2,cran3,cran4,cran5)
+    var usernums= arrayOf<Int>(uran1,uran2,uran3,uran4,uran5)
+    var computernums= arrayOf<Int>(cran1,cran2,cran3,cran4,cran5)
 
     //--scores--
     var usersum:Int=0
@@ -91,9 +91,6 @@ class Game : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-
-        println(userwins)
-        println(comwins)
 
         u1img=findViewById(R.id.u1)
         u2img=findViewById(R.id.u2)
@@ -455,13 +452,54 @@ class Game : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("computer",comwins)
-        outState.putInt("user",userwins)
+        outState.putInt("comwins",comwins)
+        outState.putInt("userwins",userwins)
+        outState.putInt("target",target)
+        outState.putInt("comsum",comsum)
+        outState.putInt("usersum",usersum)
+        outState.putBoolean("easy/hard", modeswitch?.isChecked!!)
+        outState.putIntArray("usernums",usernums.toIntArray())
+        outState.putIntArray("comnums",computernums.toIntArray())
+        outState.putInt("attempt",attempt)
+        outState.putInt("throws",throws)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        savedInstanceState.getInt("computer")
-        savedInstanceState.getInt("user")
+        comwins=savedInstanceState.getInt("comwins")
+        userwins=savedInstanceState.getInt("userwins")
+        tvwins?.text="H:"+userwins+"/C:"+comwins
+
+        target=savedInstanceState.getInt("target")
+        tvtarget?.text="Target: "+target
+
+        comsum=savedInstanceState.getInt("comsum")
+        usersum=savedInstanceState.getInt("usersum")
+        tvscore?.text=comsum.toString()+"/"+usersum.toString()
+
+        modeswitch?.isChecked=savedInstanceState.getBoolean("easy/hard")
+        if (modeswitch?.isEnabled==true){
+            modeswitch?.text="Hard"
+        }
+
+        usernums= savedInstanceState.getIntArray("usernums")?.toTypedArray()!!
+        computernums= savedInstanceState.getIntArray("comnums")?.toTypedArray()!!
+        attempt=savedInstanceState.getInt("attempt")
+        tvattempt?.text="Round "+attempt
+
+        throws=savedInstanceState.getInt("throws")
+        if (throws!=0){
+            showControllers()
+            btnsettarget?.isEnabled=false
+            modeswitch?.isEnabled=false
+        }else if (attempt>1){
+            btnsettarget?.isEnabled=false
+            modeswitch?.isEnabled=false
+        }
+        if (throws==0){
+            btnshuffle?.text="Re-throw"}
+        else if(throws==1){
+            btnshuffle?.text="Re-throw again"}
+        setImages()
     }
 }
